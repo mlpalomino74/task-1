@@ -27,20 +27,20 @@ vector4=sort( c (vector2,vector3))
 #Punto2
 list.files("data/input/")
 #Importar Base de Datos "cultivos"
-cultivos= read_xlsx("data/input/cultivos.xlsx")
+cultivos= read_xlsx("data/input/cultivos.xlsx", skip = 8)
 #limpiar observaciones que no tienen información relevante
-install.packages("data.table")
 
-####OJO esto falta verificar!
+
 cultivos = head(cultivos, -2)
-# View (datos)
+View (cultivos)
 
 long = melt(setDT(cultivos),
              id.vars = c("CODDEPTO", "DEPARTAMENTO", "CODMPIO",	"MUNICIPIO")
              , variable.name = "year")
+
 long = na.omit(long, c("value", "CODMPIO"))
 View(long)
-####OJO hasta aquí verifica!
+
 
 #Punto 3 GEIH
 #Punto 3.1 Importar
