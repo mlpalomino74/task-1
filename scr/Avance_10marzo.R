@@ -64,3 +64,5 @@ ggplot() +
   geom_histogram( data = base_unida, aes(x=P6500),bins=5) +
   ggtitle('Salario promedio antes de descuentos')
 
+
+###pendiente gráficos##
