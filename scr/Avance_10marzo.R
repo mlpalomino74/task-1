@@ -29,8 +29,18 @@ list.files("data/input/")
 #Importar Base de Datos "cultivos"
 cultivos= read_xlsx("data/input/cultivos.xlsx")
 #limpiar observaciones que no tienen información relevante
+install.packages("data.table")
 
+####OJO esto falta verificar!
+cultivos = head(cultivos, -2)
+# View (datos)
 
+long = melt(setDT(cultivos),
+             id.vars = c("CODDEPTO", "DEPARTAMENTO", "CODMPIO",	"MUNICIPIO")
+             , variable.name = "year")
+long = na.omit(long, c("value", "CODMPIO"))
+View(long)
+####OJO hasta aquí verifica!
 
 #Punto 3 GEIH
 #Punto 3.1 Importar
