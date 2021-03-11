@@ -7,7 +7,8 @@
 #initial configuration
 rm(list=ls())
 install.packages("pacman")
-pacman::p_load(tidyverse,haven,readxl,WriteXLS)
+install.packages("data.table")
+pacman::p_load(tidyverse,haven,readxl,WriteXLS,data.table)
 
 ###Desarrollo del Taller###
 ###Hemos escogido desarollar el Taller A
