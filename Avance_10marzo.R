@@ -10,14 +10,23 @@ install.packages("pacman")
 pacman::p_load(tidyverse,haven,readxl,WriteXLS)
 
 ###Desarrollo del Taller###
-#Punto 1
+###Hemos escogido desarollar el Taller A
+
+#Punto 1:
+###creacion vector 1 a 100
 vector1=seq(1,100)
+###creacion vector con numeros impacres
 vector2=seq(1,100,2)
+###unicon vector2 con los pares del vector1
+
 
 #Punto2
 list.files("data/input/")
-#Cargarmos base de datos
+#Importar Base de Datos "cultivos"
 cultivos= read_xlsx("data/input/cultivos.xlsx")
+#limpiar observaciones que no tienen información relevante
+
+
 
 #Punto 3 GEIH
 #Punto 3.1 Importar
@@ -27,12 +36,31 @@ ocupados=readRDS('data/input/2019/Cabecera - Ocupados.rds')
 view(carac_generales)
 view(ocupados)
 
-base_unida <- merge(ocupados, carac_generales,
+##Verificamos que no hayan observaciones duplicadas 
+duplicated(carac_generales)
+duplicated(ocupados)
+
+base_unida = full_join(ocupados, carac_generales,
                 by = c("directorio", "secuencia_p", "orden"),
                 all = TRUE)
 view(base_unida)
 
+
 #Punto 3.2
+###cargamos librerias necesarias para graficar
 pacman::p_load(tidyverse,viridis,forcats,gapminder)
 
+
+###Histogramas para ver distribucion muestra
+
+####¿como esta distribuida la muestra en las horas de trabajo semanales?
+ggplot() +
+  geom_histogram( data = base_unida, aes(x=P6800),bins=8) +
+  ggtitle('Histograma Horas Trabajo Semanales')
+####Se observa que la muestra se concentra entre 25 y 60 hrs trabajadas semanalmente. 
+
+####¿cuál fue la distirbución de salarios antes de descuentos?
+ggplot() +
+  geom_histogram( data = base_unida, aes(x=P6500),bins=5) +
+  ggtitle('Salario promedio antes de descuentos')
 
