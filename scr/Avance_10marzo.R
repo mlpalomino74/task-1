@@ -17,7 +17,11 @@ pacman::p_load(tidyverse,haven,readxl,WriteXLS)
 vector1=seq(1,100)
 ###creacion vector con numeros impacres
 vector2=seq(1,100,2)
-###unicon vector2 con los pares del vector1
+###unir con vector2 con los pares del vector1
+"%ni%" = Negate("%in%")
+vector3=which(vector1 %ni% vector2)  ##creamos un vector 3 a partir del vector 1 extrayendo los impares del vector 2
+vector4=sort( c (vector2,vector3))
+#### El vector 4 responde alúltimo requerimiento del enunciado del punto. 
 
 
 #Punto2
