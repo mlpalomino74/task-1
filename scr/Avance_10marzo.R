@@ -1,4 +1,4 @@
-#Elaborado por: Monica Palomino 200611835, Paula Urbina, Nicolás Danies
+#Elaborado por: Monica Palomino 200611835, Paula Urbina 201633091, Nicolás Danies
 #Colaborador: Todos los miembros!
 #Fecha de elaboración:01 de marzo del 2021
 #Fecha última modificación: 10 de marzo del 2021
