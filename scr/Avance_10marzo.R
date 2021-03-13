@@ -10,6 +10,8 @@ install.packages("pacman")
 install.packages("data.table")
 pacman::p_load(tidyverse,haven,readxl,WriteXLS,data.table)
 
+setwd("/Users/purbina/Documents/uni/9S/Taller de R/task-1-main")
+getwd()
 
 ###Desarrollo del Taller###
 ###Hemos escogido desarollar el Taller A
@@ -39,9 +41,14 @@ cultivos= read_excel("data/input/cultivos.xlsx", skip = 8)
 cultivos = head(cultivos, -2)
 View (cultivos)
 
+install.packages("reshape")
+install.packages("data.table")
+
 long = melt(setDT(cultivos),
-             id.vars = c("CODDEPTO", "DEPARTAMENTO", "CODMPIO",	"MUNICIPIO")
+            id.vars = c("CODDEPTO", "DEPARTAMENTO", "CODMPIO",	"MUNICIPIO")
              , variable.name = "year")
+
+
 
 long = na.omit(long, c("value", "CODMPIO"))
 View(long)
@@ -53,8 +60,8 @@ View(long)
 list.files("data/input/2019")
 carac_generales=readRDS('data/input/2019/Cabecera - Caracteristicas generales (Personas).rds')
 ocupados=readRDS('data/input/2019/Cabecera - Ocupados.rds')
-view(carac_generales)
-view(ocupados)
+View(carac_generales)
+View(ocupados)
 
 
 ##Verificamos que no hayan observaciones duplicadas 
@@ -64,7 +71,7 @@ duplicated(ocupados)
 base_unida = full_join(ocupados, carac_generales,
                 by = c("directorio", "secuencia_p", "orden"),
                 all = TRUE)
-view(base_unida)
+View(base_unida)
 
 
 #Punto 3.2
@@ -112,10 +119,13 @@ table_DR=desoc_resto %>% group_by(DPTO) %>% summarize(total = sum(fex_c_2011))
 table_DR ##tabla de Desocupados Rurales por dpto
 
 ###ojo esto no esta corriendo
-table_Desoc_dpto = full_join(x = table_DR , y = table_DU , by = c('DPTO') , suffixes = c('D_rurales','O_urbanos')) 
 
+table_DR <- table_DR %>% rename(DPTO = dpto)
 
+table_Desoc_dpto = full_join(x = table_DR , y = table_DU , by = NULL , suffix = c('D_rurales','O_urbanos')) 
+View(table_Desoc_dpto)
 
+rlang::last_error()
 
 
 #### Ingresos laborales promedio
@@ -205,6 +215,9 @@ ggsave(plot= Hist2 , file = "views/Distribución muestra por edad.jpeg")
 
 ####distribución por año, sexo, urbano/rural
 
+##Tablas
+View(ocupados)
+ocupados.resto=readRDS('data/input/2019/Resto - Ocupados.rds')
 
 
 
