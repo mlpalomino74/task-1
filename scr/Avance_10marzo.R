@@ -124,34 +124,88 @@ mean(ocupados$P6500)##promedio de p6500 ingresos antes de descuentos
 
 ###Histogramas para ver distribucion
 
-#### Histograma1: ¿como esta distribuida la muestra en las horas de trabajo semanales?
+#### Histograma1: ¿como esta distribuida la base "base_unida" en las horas de trabajo semanales?
 ggplot() +
   geom_histogram( data = base_unida, aes(x=P6800),colour="blue", fill="blue") +
   ggtitle('Histograma Horas Trabajo Semanales')
-#### teniendo encuenta la distribucion observad ase toma un numero de bins que agrupe la muestra 
 
+#### teniendo encuenta la distribucion observada se toma un numero de bins que agrupe la muestra: 
 ggplot() +
   geom_histogram( data = base_unida, aes(x=P6800),colour="blue", fill="blue", bins=8) +
   ggtitle('Histograma Horas Trabajo Semanales')
+
 ####este grafico es mas facil de analizar donde se observa que la muestra se concentra entre 25 y 60 hrs trabajadas semanalmente. 
 
-###lo vamos a guardar como Hist1 y le ponemos nombres a los ejes
-Hist1=ggplot() +
+###lo vamos a guardar como hist1 y le ponemos nombres a los ejes
+hist1=ggplot() +
   geom_histogram( data = base_unida, aes(x=P6800),colour="blue", fill="blue", bins=8) +
   ggtitle('Histograma Horas Trabajo Semanales') + ylab("Frecuencia")+xlab("Horas trabajo semanales") + theme_minimal()
 
-ggsave(plot= Hist1 , file = "views/Distribución Horas de trabajo semanales.jpeg")
+###exportamos a la carpeta views
+ggsave(plot= hist1 , file = "views/Distribución Horas de trabajo semanales.jpeg")
 
-#### distirbución de la muestra por edad
+#### distirbución de la base_unida por edad
 ggplot() +
   geom_histogram( data = base_unida, aes(x=P6040)) +
   ggtitle('Distribución por Edad')
 
-Hist2=Hist1=ggplot() +
+##nuevamente, escogemos número d ebins para analizar mejor la grafica
+hist2=ggplot() +
   geom_histogram( data = base_unida, aes(x=P6040),colour="blue", fill="blue", bins=20) +
   ggtitle('Distribución Muestra por edad') + ylab("Frecuencia")+xlab("Edad") + theme_minimal()
 
-ggsave(plot= Hist2 , file = "views/Distribución muestra por edad.jpeg")
+hist2
 
+###exportamos a la carpeta views
+ggsave(plot= hist2 , file = "views/Distribución muestra por edad.jpeg")
+
+
+#####Distribución de Ocupados Rurales por horas de trabajo
+ggplot() +
+  geom_histogram( data = ocupados_resto, aes(x=P6800),colour="blue", fill="blue", bins=8) +
+  ggtitle('Histograma Horas Trabajo Semanales_Rurales') + ylab("Frecuencia")+xlab("Horas trabajo semanales") + theme_minimal()
+### Se observa que las horas trabajadas de los ocupados rurales se concentran entre 40 y 50 horas.
+
+hist3=ggplot() +
+  geom_histogram( data = ocupados_resto, aes(x=P6800),colour="blue", fill="blue", bins=8) +
+  ggtitle('Histograma Horas Trabajo Semanales_Rurales') + ylab("Frecuencia")+xlab("Horas trabajo semanales") + theme_minimal()
+hist3
+
+ggsave(plot= hist3 , file = "views/Histograma_Ocupados_Rurales por horas de trabajo.jpeg")
+
+
+#####Distribución de Ocupados Rurales por ingresos antes de descuento
+ggplot() +
+  geom_histogram( data = ocupados_resto, aes(x=P6500),colour="blue", fill="blue", bins=30) +
+  ggtitle('Histograma Ingresos Ocupados Rurales') + ylab("Frecuencia")+xlab("Ingresos antes de descuentos") + theme_minimal()
+### Se observa que los ingresos de los ocupados rurales se concentran por debajo de $2,5 millones mensuales
+
+hist4=ggplot() +
+  geom_histogram( data = ocupados_resto, aes(x=P6500),colour="blue", fill="blue", bins=30) +
+  ggtitle('Histograma Ingresos Ocupados Rurales') + ylab("Frecuencia")+xlab("Ingresos antes de descuentos") + theme_minimal()
+
+ggsave(plot= hist4 , file = "views/Histograma_Ingresos_Ocupados_Rurales.jpeg")
+
+
+#####Distribución desocupados urbanos por semanas buscando trabajo
+hist5=ggplot() +
+  geom_histogram( data = desoc_cabe, aes(x=P7250),colour="blue", fill="blue", bins=5) +
+  ggtitle('Histograma Semanas Buscando Trabajo_Desocupados Urbanos') + ylab("Frecuencia")+xlab("Semanas") + theme_minimal()
+### Se observa que los desocupados urbanos han estado buscando trabajo, en su gran mayoría, entre 0 y 200 semanas.
+
+hist5
+
+ggsave(plot= hist5 , file = "views/Histograma_Ingresos_desocupados_urbanos.jpeg")
+
+
+#####Distribución desocupados rurales por semanas buscando trabajo
+hist6= ggplot() +
+  geom_histogram( data = desoc_resto, aes(x=P7250),colour="red", fill="red", bins=5) +
+  ggtitle('Histograma Semanas Buscando Trabajo_Desocupados rurales') + ylab("Frecuencia")+xlab("Semanas") + theme_minimal()
+### Se observa que los desocupados urbanos han estado buscando trabajo, en su gran mayoría, entre 0 y 200 semanas.
+
+hist6
+
+ggsave(plot= hist6 , file = "views/Histograma_Ingresos_desocupados_rurales.jpeg")
 
 
