@@ -26,7 +26,7 @@ vector2
 vector3=which(vector1 %ni% vector2)  ##creamos un vector 3 a partir del vector 1 extrayendo los impares del vector 2
 vector4=sort( c (vector2,vector3))
 vector4
-#### El vector 4 responde al último requerimiento del enunciado de este punto. 
+#### El vector 4 responde al ultimo requerimiento del enunciado de este punto. 
 
 
 #Punto2
@@ -85,39 +85,55 @@ ocupados_resto=readRDS('data/input/2019/Resto - Ocupados.rds')
 
 
 #### Análisis para Ocupados Cabecera y Rural:
-
 ####  Cantidad de personas Ocupadas por Departamento
 sum(ocupados$fex_c_2011)##total de ocupados urbanos  
-ocupados %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) 
-table_OU=ocupados %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011))
+ocupados %>% group_by(dpto) %>% summarize(OcupadosUrbanos = sum(fex_c_2011)) 
+table_OU=ocupados %>% group_by(dpto) %>% summarize(OcupadosUrbanos = sum(fex_c_2011))
 table_OU ##tabla de Ocupados Urbanos por dpto
 
 sum(ocupados_resto$fex_c_2011) ##total de ocupados rurales
-ocupados_resto %>% group_by(P388) %>% summarize(total = sum(fex_c_2011)) 
-table_OR=ocupados_resto %>% group_by(P388) %>% summarize(total = sum(fex_c_2011)) 
+ocupados_resto %>% group_by(P388) %>% summarize(OcupadosRurales = sum(fex_c_2011)) 
+table_OR=ocupados_resto %>% group_by(P388) %>% summarize(OcupadosRurales = sum(fex_c_2011)) 
 table_OR ##tabla de Ocupados Rurales por dpto
+
+#abrir  libreria haven
+library(haven)
+
+# cambiar nombre columna
+colnames(table_OR)[1]<-"dpto"
+
+#Tomar los labels de los numeros
+table_OR$dpto<- as_factor(table_OR$dpto)
+table_OU$dpto<- as_factor(table_OU$dpto)
+
+#Juntar las tablas
+table_Ocup_dpto= full_join(table_OU,table_OR, by= "dpto")
+View(table_Ocup_dpto) ##Esta tabla muestra el total de personas ocupadas urbanos y rurales  en cada departamento
+
 
 
 #### Análisis para Desocupados Cabecera y Rural:
+####  Cantidad de personas desocupadas por departamento
+sum(desoc_cabe$fex_c_2011)##total de desocupadoss urbanos  
+desoc_cabe %>% group_by(dpto) %>% summarize(DesoUrbanos = sum(fex_c_2011)) 
+table_DU=desoc_cabe %>% group_by(dpto) %>% summarize(DesoUrbanos = sum(fex_c_2011))
+table_DU ##tabla de desocupados urbanos por dpto
 
-#### Cantidad de personas Decupadas por Departamento
-sum(desoc_cabe$fex_c_2011)##total de desocupados urbanos  
-desoc_cabe %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) 
-table_DU=desoc_cabe %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) 
-table_DU ##tabla de Desocupados Urbanos por dpto
+sum(desoc_resto$fex_c_2011) ##total de desocupados rurales
+desoc_resto %>% group_by(DPTO) %>% summarize(DesoRurales = sum(fex_c_2011)) 
+table_DR=desoc_resto %>% group_by(DPTO) %>% summarize(DesoRurales = sum(fex_c_2011)) 
+table_DR ##tabla de desocupados Rurales por dpto
 
-sum(desoc_resto$fex_c_2011)##total de desocupados rurales 
-desoc_resto %>% group_by(DPTO) %>% summarize(total = sum(fex_c_2011)) 
-table_DR=desoc_resto %>% group_by(DPTO) %>% summarize(total = sum(fex_c_2011)) 
-table_DR ##tabla de Desocupados Rurales por dpto
+# cambiar nombre columna
+colnames(table_DR)[1]<-"dpto"
 
+#Tomar los labels de los numeros
+table_DR$dpto<- as_factor(table_DR$dpto)
+table_DU$dpto<- as_factor(table_DU$dpto)
 
-#### Ingresos laborales promedio
-
-###Ingresos laborales promedio por departamento
-ocupados$P6500[is.na(ocupados$P6500)] = 0
-mean(ocupados$P6500)##promedio de p6500 ingresos antes de descuentos
-
+#Juntar las tablas
+table_deso_dpto= full_join(table_DU,table_DR, by= "dpto")
+View(table_deso_dpto) ###Esta tabla muestra el total de personas desocupadas, urbanas y rurales, por departamento
 
 
 ###Histogramas para ver distribucion
