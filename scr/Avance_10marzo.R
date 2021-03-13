@@ -1,4 +1,4 @@
-#Elaborado por: Monica Palomino 200611835, Paula Urbina 201633091, Nicolás Danies
+#Elaborado por: Monica Palomino 200611835, Paula Urbina 201633091, Nicolás Danies 201822710
 #Colaborador: Todos los miembros!
 #Fecha de elaboración:01 de marzo del 2021
 #Fecha última modificación: 10 de marzo del 2021
@@ -33,7 +33,8 @@ vector4
 list.files("data/input/")
 #Importar Base de Datos "cultivos"
 cultivos= read_excel("data/input/cultivos.xlsx", skip = 8)
-#limpiar observaciones que no tienen información relevante
+#limpiar observaciones que no tienen información relevante 
+#Le incluimos skip 8 para que no incluya las primeras 8 filas
 
 cultivos = head(cultivos, -2)
 View (cultivos)
@@ -46,6 +47,7 @@ long = na.omit(long, c("value", "CODMPIO"))
 View(long)
 
 
+
 #Punto 3 GEIH
 #Punto 3.1 Importar
 list.files("data/input/2019")
@@ -53,6 +55,7 @@ carac_generales=readRDS('data/input/2019/Cabecera - Caracteristicas generales (P
 ocupados=readRDS('data/input/2019/Cabecera - Ocupados.rds')
 view(carac_generales)
 view(ocupados)
+
 
 ##Verificamos que no hayan observaciones duplicadas 
 duplicated(carac_generales)
@@ -68,10 +71,105 @@ view(base_unida)
 ###cargamos librerias necesarias para graficar
 pacman::p_load(tidyverse,viridis,forcats,gapminder)
 
+###cargamos bases de datos de Desocupados, Fuerza de Trabajo e Inactivos
+desoc_cabe=readRDS('data/input/2019/Cabecera - desocupados.rds')
+desoc_resto=readRDS('data/input/2019/Resto - desocupados.rds')
+ft_cabe=readRDS('data/input/2019/Cabecera - Fuerza de trabajo.rds')
+inac_cabe=readRDS('data/input/2019/Cabecera - Inactivos.rds')
+ocupados_resto=readRDS('data/input/2019/Resto - Ocupados.rds')
 
-#### Estadisticas descriptivas
-summarise(base_unida)
-group_by(base_unida,P6020,.add=TRUE)
+
+#### Análisis para Ocupados Cabecera y Rural:
+
+####  Cantidad de personas Ocupadas por Departamento
+sum(ocupados$fex_c_2011)##total de ocupados urbanos  
+ocupados %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) 
+table_OU=ocupados %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011))
+table_OU ##tabla de Ocupados Urbanos por dpto
+
+sum(ocupados_resto$fex_c_2011) ##total de ocupados rurales
+ocupados_resto %>% group_by(P388) %>% summarize(total = sum(fex_c_2011)) 
+table_OR=ocupados_resto %>% group_by(P388) %>% summarize(total = sum(fex_c_2011)) 
+table_OR ##tabla de Ocupados Rurales por dpto
+
+##ojo esto no esta corriendo: 
+table_Ocup_dpto = full_join(x = table_OU , y = table_OR , by = c('dpto','P388') , suffixes = c('O_urbanos','O_ruralesl')) 
+
+
+
+
+#### Análisis para Desocupados Cabecera y Rural:
+
+#### Cantidad de personas Decupadas por Departamento
+sum(desoc_cabe$fex_c_2011)##total de desocupados urbanos  
+desoc_cabe %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) 
+table_DU=desoc_cabe %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) 
+table_DU ##tabla de Desocupados Urbanos por dpto
+
+sum(desoc_resto$fex_c_2011)##total de desocupados rurales 
+desoc_resto %>% group_by(DPTO) %>% summarize(total = sum(fex_c_2011)) 
+table_DR=desoc_resto %>% group_by(DPTO) %>% summarize(total = sum(fex_c_2011)) 
+table_DR ##tabla de Desocupados Rurales por dpto
+
+###ojo esto no esta corriendo
+table_Desoc_dpto = full_join(x = table_DR , y = table_DU , by = c('DPTO') , suffixes = c('D_rurales','O_urbanos')) 
+
+
+
+
+
+#### Ingresos laborales promedio
+
+###Ingresos laborales promedio por departamento
+ocupados$P6500[is.na(ocupados$P6500)] = 0
+mean(ocupados$P6500)##promedio de p6500 ingresos antes de descuentos
+
+
+
+
+
+ggplot(data=ocupados, aes(x=ocupados$dpto,y=sum(ocupados$fex_c_2011)))
+
+ocupados %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) %>% 
+  ggplot(data = ocupados, aes(x=dpto, y=total)) +
+  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+  coord_flip() + xlab('') + ylab("Cantidad de personas") + theme_bw()
+
+
+
+#### 1.2.1. Cantidad de personas
+geih %>% group_by(dpto) %>% summarize(total = sum(fex_c_2011)) %>% 
+  ggplot(data = ., aes(x=dpto, y=total)) +
+  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+  coord_flip() + xlab('') + ylab("Cantidad de personas") + theme_bw()
+
+
+
+
+ocupados %>% group_by(dpto) %>% summarize(total = sum(directorio)) %>% 
+  ggplot(data = ocupados, aes(x=dpto, y=total)) 
+
+ocupados %>% group_by(dpto) %>% summarize(total = count(directorio)) %>% 
+ggplot(data=ocupados,mapping=aes(x=dpto,y=total))
+
++
+  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+  coord_flip() + xlab('') + ylab("Cantidad de personas") + theme_bw()
+
+
+  ocupados %>% group_by(dpto, Oficio) 
+
+
+
++
+  ggplot(data = ocupados, aes(x=dpto, y=total)) +
+  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+  coord_flip() + xlab('') + ylab("Cantidad de personas") + theme_bw()
+
+
+
+
+
 
 ###Histogramas para ver distribucion
 
@@ -106,6 +204,7 @@ ggsave(plot= Hist2 , file = "views/Distribución muestra por edad.jpeg")
 
 
 ####distribución por año, sexo, urbano/rural
+
 
 
 
