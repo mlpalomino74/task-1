@@ -10,8 +10,6 @@ install.packages("pacman")
 install.packages("data.table")
 pacman::p_load(tidyverse,haven,readxl,WriteXLS,data.table)
 
-setwd("/Users/purbina/Documents/uni/9S/Taller de R/task-1-main")
-getwd()
 
 ###Desarrollo del Taller###
 ###Hemos escogido desarollar el Taller A
@@ -98,7 +96,7 @@ sum(ocupados_resto$fex_c_2011) ##total de ocupados rurales
 ocupados_resto %>% group_by(P388) %>% summarize(total = sum(fex_c_2011)) 
 table_OR=ocupados_resto %>% group_by(P388) %>% summarize(total = sum(fex_c_2011)) 
 table_OR ##tabla de Ocupados Rurales por dpto
-plot(table_OR)
+
 
 #### Análisis para Desocupados Cabecera y Rural:
 
