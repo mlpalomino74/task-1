@@ -7,7 +7,7 @@
 #initial configuration
 rm(list=ls())
 install.packages("pacman")
-install.packages("data.table")
+install.packages("data.table") # Pacman instala los paquetes 
 pacman::p_load(tidyverse,haven,readxl,WriteXLS,data.table)
 
 
@@ -28,19 +28,22 @@ vector4=sort( c (vector2,vector3))
 vector4
 #### El vector 4 responde al ultimo requerimiento del enunciado de este punto. 
 
+cat("Otra forma de hacerlo:")
+pares = vector1[-vector2] # vector pares
+pares
 
 #Punto2
 list.files("data/input/")
 #Importar Base de Datos "cultivos"
-cultivos= read_excel("data/input/cultivos.xlsx", skip = 8)
+cultivos= read_excel("data/input/cultivos.xlsx", skip = 8) # Muy bien por usar la opción skip
 #limpiar observaciones que no tienen información relevante 
 #Le incluimos skip 8 para que no incluya las primeras 8 filas
 
-cultivos = head(cultivos, -2)
+cultivos = head(cultivos, -2) # Bien por la fucnión head()
 View (cultivos)
 
-install.packages("reshape")
-install.packages("data.table")
+install.packages("reshape") # Es mejor llamar y/o instalar todas las librerias al principio
+install.packages("data.table") # Es mejor llamar y/o instalar todas las librerias al principio
 
 long = melt(setDT(cultivos),
             id.vars = c("CODDEPTO", "DEPARTAMENTO", "CODMPIO",	"MUNICIPIO")
@@ -48,10 +51,18 @@ long = melt(setDT(cultivos),
 
 
 
-long = na.omit(long, c("value", "CODMPIO"))
+long = na.omit(long, c("value", "CODMPIO")) # Super esta función
 View(long)
 
+cat("Otra forma de hacerlo")
 
+cultivos = read_excel("data/input/cultivos.xlsx", range="A9:Y362") # cargar datos
+
+cultivos = subset(cultivos , is.na(CODMPIO)==F) # filtrar observaciones
+
+cultivos = pivot_longer(data=cultivos , cols="1999":"2019" , names_to="year" , values_to="hectareas") # pivotear la base de datos
+
+cultivos = mutate(cultivos, hectareas = ifelse(is.na(hectareas)==T,0,hectareas)) # rellenar NA's
 
 #Punto 3 GEIH
 #Punto 3.1 Importar
